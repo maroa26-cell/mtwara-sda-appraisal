@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mtwara SDA Dispensary - Performance Appraisal System</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+            color: #1a1a2e;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            padding: 40px;
+        }
+        
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            border-bottom: 4px solid #1a5276;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo-placeholder {
+            width: 140px;
+            height: 140px;
+            border: 3px dashed #1a5276;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #1a5276;
+            background: #eaf2f8;
+        }
+        .header h1 {
+            font-size: 28px;
+            color: #1a5276;
+            letter-spacing: 1px;
+        }
+        .header h2 {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: normal;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        .header .mission {
+            margin-top: 12px;
+            padding: 12px 20px;
+            background: #eaf2f8;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1a5276;
+            border-left: 4px solid #1a5276;
+        }
+        
+        /* ===== NAV TABS ===== */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 25px 0 20px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.3s;
+            flex: 1 1 auto;
+        }
+        .tab-btn:hover {
+            background: #d5dbdb;
+        }
+        .tab-btn.active {
+            background: #1a5276;
+            color: #ffffff;
+        }
+        
+        /* ===== TAB CONTENT ===== */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ===== TABLES ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 25px;
+            font-size: 13px;
+        }
+        th {
+            background: #1a5276;
+            color: #ffffff;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        tr:hover {
+            background: #f7f9fa;
+        }
+        
+        /* ===== FORMS ===== */
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #1a5276;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d5d8dc;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ===== CHECKBOX GRID ===== */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 20px;
+            padding: 10px 0;
+        }
+        .checkbox-grid label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .checkbox-grid input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #1a5276;
+        }
+        
+        /* ===== SCORE DISPLAY ===== */
+        .score-box {
+            background: #eaf2f8;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 15px 0;
+            border-left: 5px solid #1a5276;
+        }
+        .score-box h3 {
+            color: #1a5276;
+            margin-bottom: 8px;
+        }
+        .score-row {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .score-item {
+            background: #ffffff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            min-width: 120px;
+            text-align: center;
+        }
+        .score-item .number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a5276;
+        }
+        .score-item .label {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+        }
+        
+        /* ===== BUTTONS ===== */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-primary {
+            background: #1a5276;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background: #154360;
+        }
+        .btn-success {
+            background: #27ae60;
+            color: #ffffff;
+        }
+        .btn-success:hover {
+            background: #1e8449;
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: #ffffff;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        .btn-warning {
+            background: #f39c12;
+            color: #ffffff;
+        }
+        .btn-warning:hover {
+            background: #d68910;
+        }
+        
+        /* ===== RATING BADGES ===== */
+        .badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .badge-excellent { background: #27ae60; color: #fff; }
+        .badge-good { background: #2e86c1; color: #fff; }
+        .badge-satisfactory { background: #f39c12; color: #fff; }
+        .badge-needs { background: #e67e22; color: #fff; }
+        .badge-unsatisfactory { background: #e74c3c; color: #fff; }
+        .badge-distinguished { background: #8e44ad; color: #fff; }
+        .badge-outstanding { background: #1abc9c; color: #fff; }
+        .badge-proficient { background: #3498db; color: #fff; }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            .header h1 { font-size: 22px; }
+            .tabs .tab-btn { font-size: 13px; padding: 10px 16px; }
+            .form-row { grid-template-columns: 1fr; }
+            .checkbox-grid { grid-template-columns: 1fr; }
+            table { font-size: 12px; }
+            th, td { padding: 6px 8px; }
+        }
+        @media print {
+            body { background: #fff; padding: 0; }
+            .container { box-shadow: none; padding: 20px; border-radius: 0; }
+            .btn-group { display: none; }
+            .tabs { display: none; }
+            .tab-content { display: block !important; }
+            .logo-placeholder { border-color: #000; }
+            .score-box { break-inside: avoid; }
+            table { break-inside: auto; }
+            tr { break-inside: avoid; }
+        }
+        
+        /* ===== PRINT BUTTON STYLES ===== */
+        .print-note {
+            background: #fef9e7;
+            border: 1px solid #f1c40f;
+            border-radius: 8px;
+            padding: 12px 18px;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #7d6608;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .print-note strong {
+            color: #5b3e00;
+        }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ecf0f1;
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+        .footer .verse {
+            font-style: italic;
+            color: #1a5276;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <div class="logo-placeholder">
+            <div style="text-align:center;">
+                <strong>LOGO</strong><br>
+                <span style="font-size:10px;">[Insert Facility Logo]</span>
+            </div>
+        </div>
+        <h1>MTWARA SDA DISPENSARY</h1>
+        <h2>Staff Performance Assessment System (SPAS)</h2>
+        <div class="mission">
+            <strong>Mission:</strong> "Excellence in Service, Faith in Action — Holistic, Compassionate, Christ-Centered Healthcare"
+        </div>
+    </div>
+
+    <!-- ===== NAVIGATION TABS ===== -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('daily')">📋 Daily</button>
+        <button class="tab-btn" onclick="openTab('monthly')">📊 Monthly</button>
+        <button class="tab-btn" onclick="openTab('annual')">🏆 Annual</button>
+        <button class="tab-btn" onclick="openTab('dashboard')">📈 Dashboard</button>
+    </div>
+
+    <!-- ===== PRINT INSTRUCTIONS ===== -->
+    <div class="print-note">
+        <span style="font-size:24px;">🖨️</span>
+        <div>
+            <strong>Print to PDF:</strong> 
+            Click the <strong>Print / Save as PDF</strong> button below, or press 
+            <strong>Ctrl+P (Windows)</strong> / <strong>Cmd+P (Mac)</strong> and select 
+            <strong>"Save as PDF"</strong> as the destination.
+        </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- ===== TAB 1: DAILY ===== -->
+    <!-- ================================================================ -->
+    <div id="daily" class="tab-content active">
+
+        <h2 style="color:#1a5276; margin-bottom:8px;">📋 Daily Performance Tracker</h2>
+        <p style="color:#7f8c8d; margin-bottom:18px;">Staff Name: <input type="text" style="width:250px; padding:6px 10px; border:1px solid #d5d8dc; border-radius:4px;" placeholder="Enter staff name"> | Date: <input type="date" style="padding:6px 10px; border:1px solid #d5d8dc; border-radius:4px;"></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:45px;">#</th>
+                    <th>Checklist Item</th>
+                    <th style="width:70px; text-align:center;">✓</th>
+                    <th style="width:70px; text-align:center;">✗</th>
+                    <th style="width:100px;">Supervisor Initials</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>Arrived at least 10 minutes before shift start</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="1"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="1" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>2</td><td>Signed in/out correctly on attendance register</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="2"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="2" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>3</td><td>Properly dressed in clean uniform with visible ID badge</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="3"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="3" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>4</td><td>Attended morning devotion/prayer meeting</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="4"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="4" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>5</td><td>Took breaks at scheduled times; returned on time</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="5"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="5" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>6</td><td>Workstation/area properly set up before start</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="6"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="6" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>7</td><td>Equipment checked and found functional</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="7"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="7" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>8</td><td>Supplies/inventory checked and restocked as needed</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="8"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="8" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>9</td><td>Greeted every patient/visitor with courtesy and warmth</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="9"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="9" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>10</td><td>Demonstrated compassion and active listening</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="10"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="10" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>11</td><td>Responded to patient needs within reasonable time</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="11"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="11" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>12</td><td>Completed all assigned clinical tasks for the shift</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="12"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="12" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>13</td><td>Accurate and timely documentation completed</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="13"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="13" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>14</td><td>Followed infection prevention protocols consistently</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="14"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="14" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>15</td><td>Medication/drugs administered safely and correctly</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="15"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="15" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>16</td><td>Reported any safety hazards or incidents promptly</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="16"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="16" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>17</td><td>Maintained cleanliness and order in work area</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="17"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="17" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>18</td><td>Proper waste segregation and disposal followed</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="18"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="18" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>19</td><td>Communicated effectively with colleagues and supervisors</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="19"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="19" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>20</td><td>Handed over shift thoroughly and clearly</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="20"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="20" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>21</td><td>Used resources wisely; avoided waste</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="21"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="21" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>22</td><td>Completed end-of-shift reconciliation/closure</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="22"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="22" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>23</td><td>Maintained positive and respectful attitude throughout</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="23"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="23" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+                <tr><td>24</td><td>Handled challenges without frustration or complaining</td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="24"></td><td style="text-align:center;"><input type="checkbox" class="daily-check" data-idx="24" data-neg="true"></td><td><input type="text" style="width:80px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td></tr>
+            </tbody>
+        </table>
+
+        <div style="text-align:right; margin:10px 0;">
+            <button class="btn btn-primary" onclick="calculateDailyScore()">Calculate Score</button>
+        </div>
+
+        <div class="score-box" id="dailyScoreBox">
+            <h3>📊 Daily Score Summary</h3>
+            <div class="score-row">
+                <div class="score-item"><span class="number" id="dailyTotal">0</span><div class="label">Total Score</div></div>
+                <div class="score-item"><span class="number" id="dailyRating">—</span><div class="label">Rating</div></div>
+                <div class="score-item"><span class="number" id="dailyPercent">0%</span><div class="label">Percentage</div></div>
+            </div>
+        </div>
+
+        <div style="margin-top:20px;">
+            <h4 style="color:#1a5276;">📝 Supervisor's Comments</h4>
+            <textarea style="width:100%; padding:10px; border:1px solid #d5d8dc; border-radius:6px; min-height:80px;" placeholder="Enter supervisor comments..."></textarea>
+        </div>
+
+        <div style="margin-top:15px;">
+            <h4 style="color:#1a5276;">📝 Employee's Self-Reflection</h4>
+            <textarea style="width:100%; padding:10px; border:1px solid #d5d8dc; border-radius:6px; min-height:80px;" placeholder="What went well? What could be improved?"></textarea>
+        </div>
+
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- ===== TAB 2: MONTHLY ===== -->
+    <!-- ================================================================ -->
+    <div id="monthly" class="tab-content">
+
+        <h2 style="color:#1a5276; margin-bottom:8px;">📊 Monthly Performance Assessment</h2>
+        <p style="color:#7f8c8d; margin-bottom:18px;">Month: <input type="month" style="padding:6px 10px; border:1px solid #d5d8dc; border-radius:4px;"> | Staff: <input type="text" style="padding:6px 10px; border:1px solid #d5d8dc; border-radius:4px; width:200px;" placeholder="Staff name"></p>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Punctuality & Attendance Score (0-25)</label>
+                <input type="number" id="monthPunctuality" min="0" max="25" value="20" onchange="calcMonthly()">
+            </div>
+            <div class="form-group">
+                <label>Productivity & Work Output (0-25)</label>
+                <input type="number" id="monthProductivity" min="0" max="25" value="18" onchange="calcMonthly()">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Role-Specific Metrics (0-25)</label>
+                <input type="number" id="monthRole" min="0" max="25" value="19" onchange="calcMonthly()">
+            </div>
+            <div class="form-group">
+                <label>Quality & Compliance (0-25)</label>
+                <input type="number" id="monthQuality" min="0" max="25" value="20" onchange="calcMonthly()">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Behavioral & Cultural Assessment (0-25)</label>
+            <input type="number" id="monthBehavioral" min="0" max="25" value="21" onchange="calcMonthly()" style="width:100%;">
+        </div>
+
+        <div class="score-box" id="monthlyScoreBox">
+            <h3>📊 Monthly Score Summary</h3>
+            <div class="score-row">
+                <div class="score-item"><span class="number" id="monthTotal">0</span><div class="label">Total Score (Max 125)</div></div>
+                <div class="score-item"><span class="number" id="monthPercent">0%</span><div class="label">Percentage</div></div>
+                <div class="score-item"><span class="number" id="monthRating">—</span><div class="label">Rating</div></div>
+            </div>
+        </div>
+
+        <div style="margin-top:20px;">
+            <h4 style="color:#1a5276;">📝 Supervisor's Monthly Comments</h4>
+            <textarea style="width:100%; padding:10px; border:1px solid #d5d8dc; border-radius:6px; min-height:80px;" placeholder="Commendations, concerns, and recommendations..."></textarea>
+        </div>
+        <div style="margin-top:15px;">
+            <h4 style="color:#1a5276;">📝 Employee's Monthly Reflection</h4>
+            <textarea style="width:100%; padding:10px; border:1px solid #d5d8dc; border-radius:6px; min-height:80px;" placeholder="What achievements? What challenges? Goals for next month..."></textarea>
+        </div>
+
+        <div style="margin-top:15px; display:flex; gap:12px; flex-wrap:wrap;">
+            <div style="background:#ecf0f1; padding:12px 18px; border-radius:6px;">
+                <strong>Rating Scale:</strong>
+                <span style="margin-left:8px;">⭐ Excellent: 90-100% | ✓ Good: 80-89% | ⚠️ Satisfactory: 70-79% | 🔶 Needs: 50-69% | ❌ Unsatisfactory: &lt;50%</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- ===== TAB 3: ANNUAL ===== -->
+    <!-- ================================================================ -->
+    <div id="annual" class="tab-content">
+
+        <h2 style="color:#1a5276; margin-bottom:8px;">🏆 Annual Performance Appraisal</h2>
+        <p style="color:#7f8c8d; margin-bottom:18px;">Year: <input type="number" value="2026" style="padding:6px 10px; border:1px solid #d5d8dc; border-radius:4px; width:100px;"> | Staff: <input type="text" style="padding:6px 10px; border:1px solid #d5d8dc; border-radius:4px; width:200px;" placeholder="Staff name"></p>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Monthly Score Average (0-100%)</label>
+                <input type="number" id="annMonthlyAvg" min="0" max="100" value="82" onchange="calcAnnual()">
+            </div>
+            <div class="form-group">
+                <label>SMART Competency Score (0-100%)</label>
+                <input type="number" id="annSMART" min="0" max="100" value="80" onchange="calcAnnual()">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Role-Specific Technical Score (0-100%)</label>
+                <input type="number" id="annTechnical" min="0" max="100" value="78" onchange="calcAnnual()">
+            </div>
+            <div class="form-group">
+                <label>Quality, Safety & Outcomes (0-100%)</label>
+                <input type="number" id="annQuality" min="0" max="100" value="85" onchange="calcAnnual()">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Spiritual & Cultural Alignment (0-100%)</label>
+                <input type="number" id="annSpiritual" min="0" max="100" value="88" onchange="calcAnnual()">
+            </div>
+            <div class="form-group">
+                <label>Innovation & Professional Growth (0-100%)</label>
+                <input type="number" id="annInnovation" min="0" max="100" value="75" onchange="calcAnnual()">
+            </div>
+        </div>
+
+        <div class="score-box" id="annualScoreBox">
+            <h3>🏆 Annual Composite Performance Index (ACPI)</h3>
+            <div class="score-row">
+                <div class="score-item"><span class="number" id="annACPI">0%</span><div class="label">ACPI Score</div></div>
+                <div class="score-item"><span class="number" id="annRating">—</span><div class="label">Annual Rating</div></div>
+                <div class="score-item"><span class="number" id="annReward">—</span><div class="label">Recommended Reward</div></div>
+            </div>
+        </div>
+
+        <div style="background:#fef9e7; border-left:4px solid #f1c40f; padding:14px 18px; border-radius:6px; margin:15px 0;">
+            <strong>📌 Rating Scale:</strong>
+            ⭐⭐⭐⭐⭐ Distinguished (95-100%) · ⭐⭐⭐⭐ Outstanding (85-94%) · ⭐⭐⭐ Proficient (70-84%) · ⭐⭐ Developing (50-69%) · ⭐ Unsatisfactory (&lt;50%)
+        </div>
+
+        <div style="margin-top:20px;">
+            <h4 style="color:#1a5276;">📝 Annual Development Plan</h4>
+            <table>
+                <thead><tr><th>Goal</th><th>SMART Goal</th><th>Timeline</th><th>Success Metric</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td><input type="text" style="width:100%; border:1px solid #ddd; border-radius:4px; padding:4px 6px;" placeholder="Enter SMART goal"></td><td><input type="text" style="width:100%; border:1px solid #ddd; border-radius:4px; padding:4px 6px;" placeholder="Q1/Q2/Q3/Q4"></td><td><input type="text" style="width:100%; border:1px solid #ddd; border-radius:4px; padding:4px 6px;" placeholder="How to measure success"></td></tr>
+                    <tr><td>2</td><td><input type="text" style="width:100%; border:1px solid #ddd; border-radius:4px; padding:4px 6px;" placeholder="Enter SMART goal"></td><td><input type="text" style="width:100%; border:1px solid #ddd; border-radius:4px; padding:4px 6px;" placeholder="Q1/Q2/Q3/Q4"></td><td><input type="text" style="width:100%; border:1px solid #ddd; border-radius:4px; padding:4px 6px;" placeholder="How to measure success"></td></tr>
+                    <tr><td>3</td><td><input type="text" style="width:100%; border:1px solid #ddd; border-radius:4px; padding:4px 6px;" placeholder="Enter SMART goal"></td><td><input type="text" style="width:100%; border:1px solid #ddd; border-radius:4px; padding:4px 6px;" placeholder="Q1/Q2/Q3/Q4"></td><td><input type="text" style="width:100%; border:1px solid #ddd; border-radius:4px; padding:4px 6px;" placeholder="How to measure success"></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top:20px;">
+            <h4 style="color:#1a5276;">📝 Supervisor's Annual Summary</h4>
+            <textarea style="width:100%; padding:10px; border:1px solid #d5d8dc; border-radius:6px; min-height:80px;" placeholder="Strengths, areas for growth, final recommendations..."></textarea>
+        </div>
+        <div style="margin-top:15px;">
+            <h4 style="color:#1a5276;">📝 Employee's Annual Reflection</h4>
+            <textarea style="width:100%; padding:10px; border:1px solid #d5d8dc; border-radius:6px; min-height:80px;" placeholder="What am I proud of? Challenges overcome? What support do I need?"></textarea>
+        </div>
+
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- ===== TAB 4: DASHBOARD ===== -->
+    <!-- ================================================================ -->
+    <div id="dashboard" class="tab-content">
+
+        <h2 style="color:#1a5276; margin-bottom:8px;">📈 Performance Dashboard</h2>
+        <p style="color:#7f8c8d; margin-bottom:18px;">Summary of all assessment levels for a complete performance picture.</p>
+
+        <!-- STAFF ROSTER -->
+        <h3 style="color:#1a5276; margin-top:15px;">👥 Staff Roster Summary</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Staff Name</th>
+                    <th>Job Title</th>
+                    <th>Department</th>
+                    <th>Daily Avg</th>
+                    <th>Monthly</th>
+                    <th>Annual</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td><input type="text" style="width:120px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:120px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:100px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:60px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:60px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:60px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><span class="badge badge-proficient">Proficient</span></td></tr>
+                <tr><td>2</td><td><input type="text" style="width:120px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:120px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:100px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:60px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:60px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:60px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><span class="badge badge-outstanding">Outstanding</span></td></tr>
+                <tr><td>3</td><td><input type="text" style="width:120px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:120px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:100px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:60px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:60px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><input type="text" style="width:60px; border:1px solid #ddd; border-radius:4px; padding:4px 6px;"></td><td><span class="badge badge-excellent">Excellent</span></td></tr>
+            </tbody>
+        </table>
+
+        <!-- KEY PERFORMANCE INDICATORS -->
+        <h3 style="color:#1a5276; margin-top:25px;">📊 Key Performance Indicators (KPIs)</h3>
+        <div class="form-row" style="margin-top:10px;">
+            <div class="score-item" style="flex:1;"><span class="number" id="kpiPunctuality">92%</span><div class="label">Punctuality</div></div>
+            <div class="score-item" style="flex:1;"><span class="number" id="kpiProductivity">88%</span><div class="label">Productivity</div></div>
+            <div class="score-item" style="flex:1;"><span class="number" id="kpiQuality">94%</span><div class="label">Quality</div></div>
+            <div class="score-item" style="flex:1;"><span class="number" id="kpiSatisfaction">91%</span><div class="label">Patient Satisfaction</div></div>
+        </div>
+
+        <!-- TREND INDICATORS -->
+        <h3 style="color:#1a5276; margin-top:25px;">📈 Trend Analysis</h3>
+        <div style="background:#ecf0f1; padding:15px; border-radius:6px;">
+            <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
+                <div><span style="font-weight:600;">Monthly Trend:</span> <span style="color:#27ae60;">↑ Improving</span> (Last 3 months: 78% → 82% → 85%)</div>
+                <div><span style="font-weight:600;">Quarterly Trend:</span> <span style="color:#27ae60;">↑ Positive</span> (Q1: 80%, Q2: 84%, Q3: 87%)</div>
+                <div><span style="font-weight:600;">Annual Trajectory:</span> <span style="color:#2e86c1;">→ Stable Excellence</span></div>
+            </div>
+        </div>
+
+        <!-- COMPENSATION LINK -->
+        <h3 style="color:#1a5276; margin-top:25px;">💰 Compensation & Rewards Link</h3>
+        <table>
+            <thead>
+                <tr><th>Rating</th><th>Salary Increment</th><th>Bonus Eligibility</th><th>Non-Monetary Recognition</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><span class="badge badge-distinguished">Distinguished</span></td><td>10-15%</td><td>✓✓✓ High</td><td>Leadership Award; Public Recognition</td></tr>
+                <tr><td><span class="badge badge-outstanding">Outstanding</span></td><td>7-9%</td><td>✓✓ Medium</td><td>Certificate; Training Sponsorship</td></tr>
+                <tr><td><span class="badge badge-proficient">Proficient</span></td><td>4-6%</td><td>✓ Small</td><td>Letter of Commendation</td></tr>
+                <tr><td><span class="badge badge-needs">Developing</span></td><td>0-2%</td><td>✗</td><td>PIP; Mentoring</td></tr>
+                <tr><td><span class="badge badge-unsatisfactory">Unsatisfactory</span></td><td>0%</td><td>✗</td><td>Probation; Termination</td></tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- ===== BUTTONS ===== -->
+    <!-- ================================================================ -->
+    <div class="btn-group">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        <button class="btn btn-success" onclick="resetAll()">🔄 Reset All</button>
+        <button class="btn btn-warning" onclick="exportData()">📤 Export Data</button>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- ===== FOOTER ===== -->
+    <!-- ================================================================ -->
+    <div class="footer">
+        <div class="verse">"Whatever you do, work at it with all your heart, as working for the Lord, not for human masters." — Colossians 3:23</div>
+        <div style="font-size:12px; color:#bdc3c7;">
+            Mtwara SDA Dispensary | P.O. Box ____, Mtwara, Tanzania | Version 3.0 (2026)
+        </div>
+    </div>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- ===== JAVASCRIPT ===== -->
+<!-- ================================================================ -->
+<script>
+    // ===== TAB NAVIGATION =====
+    function openTab(tabName) {
+        var tabs = document.querySelectorAll('.tab-content');
+        var btns = document.querySelectorAll('.tab-btn');
+        tabs.forEach(function(tab) { tab.classList.remove('active'); });
+        btns.forEach(function(btn) { btn.classList.remove('active'); });
+        document.getElementById(tabName).classList.add('active');
+        document.querySelector('.tab-btn[onclick="openTab(\'' + tabName + '\')"]').classList.add('active');
+    }
+
+    // ===== DAILY SCORE CALCULATION =====
+    function calculateDailyScore() {
+        var checks = document.querySelectorAll('.daily-check');
+        var score = 0;
+        checks.forEach(function(cb) {
+            if (cb.checked) {
+                // If it's a negative checkbox (data-neg="true"), it means NO, so don't count
+                if (!cb.dataset.neg) {
+                    score++;
+                }
+            }
+        });
+        // We need to properly count: each pair (YES/NO) should give 1 point if YES is checked and NO is not
+        // But since we have both, we count only YES checkboxes that are checked and their paired NO is unchecked
+        var rows = document.querySelectorAll('#daily tbody tr');
+        var actualScore = 0;
+        rows.forEach(function(row) {
+            var yes = row.querySelector('.daily-check:not([data-neg])');
+            var no = row.querySelector('.daily-check[data-neg]');
+            if (yes && no) {
+                if (yes.checked && !no.checked) {
+                    actualScore++;
+                }
+            }
+        });
+
+        document.getElementById('dailyTotal').textContent = actualScore;
+        var percent = Math.round((actualScore / 24) * 100);
+        document.getElementById('dailyPercent').textContent = percent + '%';
+
+        var rating = '';
+        var badgeClass = '';
+        if (actualScore >= 22) { rating = '⭐ Excellent'; badgeClass = 'badge-excellent'; }
+        else if (actualScore >= 18) { rating = '✓ Good'; badgeClass = 'badge-good'; }
+        else if (actualScore >= 15) { rating = '⚠️ Satisfactory'; badgeClass = 'badge-satisfactory'; }
+        else { rating = '❌ Needs Improvement'; badgeClass = 'badge-unsatisfactory'; }
+
+        document.getElementById('dailyRating').innerHTML = '<span class="badge ' + badgeClass + '">' + rating + '</span>';
+    }
+
+    // Auto-calculate daily on checkbox change
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('daily-check')) {
+            calculateDailyScore();
+        }
+    });
+
+    // ===== MONTHLY CALCULATION =====
+    function calcMonthly() {
+        var p = parseFloat(document.getElementById('monthPunctuality').value) || 0;
+        var pr = parseFloat(document.getElementById('monthProductivity').value) || 0;
+        var r = parseFloat(document.getElementById('monthRole').value) || 0;
+        var q = parseFloat(document.getElementById('monthQuality').value) || 0;
+        var b = parseFloat(document.getElementById('monthBehavioral').value) || 0;
+
+        var total = p + pr + r + q + b;
+        var percent = Math.round((total / 125) * 100);
+
+        document.getElementById('monthTotal').textContent = total;
+        document.getElementById('monthPercent').textContent = percent + '%';
+
+        var rating = '';
+        var badgeClass = '';
+        if (percent >= 90) { rating = '⭐ Excellent'; badgeClass = 'badge-excellent'; }
+        else if (percent >= 80) { rating = '✓ Good'; badgeClass = 'badge-good'; }
+        else if (percent >= 70) { rating = '⚠️ Satisfactory'; badgeClass = 'badge-satisfactory'; }
+        else if (percent >= 50) { rating = '🔶 Needs Improvement'; badgeClass = 'badge-needs'; }
+        else { rating = '❌ Unsatisfactory'; badgeClass = 'badge-unsatisfactory'; }
+
+        document.getElementById('monthRating').innerHTML = '<span class="badge ' + badgeClass + '">' + rating + '</span>';
+    }
+
+    // ===== ANNUAL CALCULATION =====
+    function calcAnnual() {
+        var avg = parseFloat(document.getElementById('annMonthlyAvg').value) || 0;
+        var smart = parseFloat(document.getElementById('annSMART').value) || 0;
+        var tech = parseFloat(document.getElementById('annTechnical').value) || 0;
+        var qual = parseFloat(document.getElementById('annQuality').value) || 0;
+        var spirit = parseFloat(document.getElementById('annSpiritual').value) || 0;
+        var innov = parseFloat(document.getElementById('annInnovation').value) || 0;
+
+        var acpi = (avg * 0.30) + (smart * 0.25) + (tech * 0.20) + (qual * 0.10) + (spirit * 0.10) + (innov * 0.05);
+        acpi = Math.round(acpi);
+
+        document.getElementById('annACPI').textContent = acpi + '%';
+
+        var rating = '';
+        var badgeClass = '';
+        var reward = '';
+        if (acpi >= 95) { rating = '⭐⭐⭐⭐⭐ Distinguished'; badgeClass = 'badge-distinguished'; reward = '12-15% Increment + Leadership Award'; }
+        else if (acpi >= 85) { rating = '⭐⭐⭐⭐ Outstanding'; badgeClass = 'badge-outstanding'; reward = '8-11% Increment + Bonus'; }
+        else if (acpi >= 70) { rating = '⭐⭐⭐ Proficient'; badgeClass = 'badge-proficient'; reward = '4-7% Increment'; }
+        else if (acpi >= 50) { rating = '⭐⭐ Developing'; badgeClass = 'badge-needs'; reward = '0-3% Increment + PIP'; }
+        else { rating = '⭐ Unsatisfactory'; badgeClass = 'badge-unsatisfactory'; reward = 'No Increment + Probation'; }
+
+        document.getElementById('annRating').innerHTML = '<span class="badge ' + badgeClass + '">' + rating + '</span>';
+        document.getElementById('annReward').textContent = reward;
+    }
+
+    // ===== RESET ALL =====
+    function resetAll() {
+        if (confirm('Reset all inputs and scores?')) {
+            document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) { cb.checked = false; });
+            document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(function(el) {
+                if (el.type !== 'checkbox') { el.value = ''; }
+            });
+            // Reset scores
+            document.getElementById('dailyTotal').textContent = '0';
+            document.getElementById('dailyPercent').textContent = '0%';
+            document.getElementById('dailyRating').textContent = '—';
+            document.getElementById('monthTotal').textContent = '0';
+            document.getElementById('monthPercent').textContent = '0%';
+            document.getElementById('monthRating').textContent = '—';
+            document.getElementById('annACPI').textContent = '0%';
+            document.getElementById('annRating').textContent = '—';
+            document.getElementById('annReward').textContent = '—';
+            // Reset KPI values
+            document.getElementById('kpiPunctuality').textContent = '—';
+            document.getElementById('kpiProductivity').textContent = '—';
+            document.getElementById('kpiQuality').textContent = '—';
+            document.getElementById('kpiSatisfaction').textContent = '—';
+        }
+    }
+
+    // ===== EXPORT DATA (CSV) =====
+    function exportData() {
+        alert('📤 Export feature: In production, this would download a CSV file with all assessment data.\n\nFor now, please use "Print / Save as PDF" to generate a PDF document.');
+        // In a real implementation, you would collect all form data and generate a CSV
+    }
+
+    // ===== INITIALIZE =====
+    // Set default values
+    window.onload = function() {
+        document.getElementById('monthPunctuality').value = 20;
+        document.getElementById('monthProductivity').value = 18;
+        document.getElementById('monthRole').value = 19;
+        document.getElementById('monthQuality').value = 20;
+        document.getElementById('monthBehavioral').value = 21;
+        document.getElementById('annMonthlyAvg').value = 82;
+        document.getElementById('annSMART').value = 80;
+        document.getElementById('annTechnical').value = 78;
+        document.getElementById('annQuality').value = 85;
+        document.getElementById('annSpiritual').value = 88;
+        document.getElementById('annInnovation').value = 75;
+        calcMonthly();
+        calcAnnual();
+        calculateDailyScore();
+
+        // Set KPI defaults
+        document.getElementById('kpiPunctuality').textContent = '92%';
+        document.getElementById('kpiProductivity').textContent = '88%';
+        document.getElementById('kpiQuality').textContent = '94%';
+        document.getElementById('kpiSatisfaction').textContent = '91%';
+    };
+</script>
+
+</body>
+</html>
